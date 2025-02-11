@@ -24,10 +24,13 @@ namespace YumBlazor.Repository {
         public async Task<bool> DeleteAsync(int id) {
 
             var obj = await _db.Product.FirstOrDefaultAsync(q => q.Id == id);
-            var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, obj.ImageUrl.TrimStart('/'));
-            if (File.Exists(imagePath)) {
+            if (!string.IsNullOrEmpty(obj.ImageUrl)) {
 
-                File.Delete(imagePath);
+                var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, obj.ImageUrl.TrimStart('/'));
+                if (File.Exists(imagePath)) {
+
+                    File.Delete(imagePath);
+                }
             }
             if (obj != null) {
                 _db.Product.Remove(obj);
